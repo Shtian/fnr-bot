@@ -40,7 +40,7 @@ const getMaleAgeEmoji = (age: number): string => {
     return '🦖';
 }
 
-export const formatMsg = (age: number, gender: BinaryGender, fnr: string): string {
+export const formatMsg = (age: number, gender: BinaryGender, fnr: string): string => {
     switch (gender) {
         case "female":
             return `${getFemaleAgeEmoji(age)} - ${fnr}`;
