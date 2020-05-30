@@ -1,7 +1,15 @@
 import { getRandomDateInRange } from './date-generator';
 
-const CONTROL_DIGIT_1 = [ 3, 7, 6, 1, 8, 9, 4, 5, 2, 1 ];
-const CONTROL_DIGIT_2 = [ 5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1 ];
+export type BinaryGender = "male" | "female";
+
+export interface FnrInfo {
+    age: number;
+    gender: BinaryGender;
+    fnr: string;
+}
+
+const CONTROL_DIGIT_1 = [3, 7, 6, 1, 8, 9, 4, 5, 2, 1];
+const CONTROL_DIGIT_2 = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1];
 
 const zeropad = (i: number | string): string => {
     return `${i}`.padStart(2, '0');
@@ -10,6 +18,8 @@ const zeropad = (i: number | string): string => {
 const rnd = (min = 0, max = 1): number => {
     return Math.floor(Math.random() * max) + min;
 };
+
+const getAge = (birthDate: Date) => Math.floor((new Date().getTime() - birthDate.getTime()) / 3.15576e+10);
 
 /**
  * odd hundreds = is between 0 and 499, even are between 500 and 999
@@ -68,15 +78,21 @@ const generate = (min: Date, max: Date) => {
     return `${datestring}${iNumber}${controlDigitOne}${controlDigitTwo}`;
 };
 
-export const generator = (minAge: number, maxAge: number, count: number): string[] => {
-    const fnrs: string[] = [];
+
+
+export const generator = (minAge: number, maxAge: number, count: number): FnrInfo[] => {
+    const fnrs: FnrInfo[] = [];
     const now = new Date();
     const birthdateRangeStart =
         minAge === 0 ? now : new Date(now.getFullYear() - minAge, now.getMonth(), now.getDate());
     const birthdateRangeEnd = new Date(now.getFullYear() - maxAge, now.getMonth(), now.getDate());
-    console.log(birthdateRangeStart, birthdateRangeEnd);
+
     for (let i = 0; i < count; i++) {
-        fnrs.push(generate(birthdateRangeStart, birthdateRangeEnd));
+        const fnr = generate(birthdateRangeStart, birthdateRangeEnd);
+        const gender = Number(fnr.split('')[8]) % 2 ? "male" : "female";
+        const birthYear = Number(fnr.split('')[6]) < 5 ? `19${fnr.substring(4, 6)}` : `20${fnr.substring(4, 6)}`;
+        const age = getAge(new Date(Number(birthYear), Number(fnr.substring(2, 4)), Number(fnr.substring(0, 2))));
+        fnrs.push({ age, gender, fnr })
     }
 
     return fnrs;
