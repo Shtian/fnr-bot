@@ -7,6 +7,7 @@
     "test": "jest --config=jest.config.js",
     "build": "tsc && copyfiles index.html dist",
     "start": "build && node ./dist/index.js",
+    "lint": "eslint ./src/**/*.ts",
     "dev": "ts-node-dev --respawn --transpileOnly ./index.ts"
   },
   "author": "Stian Haga",
@@ -42,6 +43,6 @@
     }
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix"
+    "*.ts": "eslint --cache --fix"
   }
 }
