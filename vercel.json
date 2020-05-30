@@ -1,0 +1,3 @@
+{
+    "routes": [ { "src": "/fnr", "methods": [ "GET" ], "dest": "/api/fnr.ts" }, { "src": "/", "dest": "/fnr" } ]
+}
