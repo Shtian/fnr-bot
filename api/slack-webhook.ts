@@ -20,7 +20,7 @@ const generateBlock = ({ age, gender, fnr }: FnrInfo): SlackSectionBlock => {
 };
 
 export default (req: NowRequest, res: NowResponse): void => {
-  console.log(req.body.token, process.env.FNR_SLACK_TOKEN);
+  console.log(req.body.token, process.env);
   if (req.body.token !== process.env.FNR_SLACK_TOKEN) {
     res.json({
       response_type: "ephemeral",
