@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --config=jest.config.js",
-    "build": "tsc",
+    "build": "tsc && copyfiles index.html dist",
     "start": "build && node ./dist/index.js",
     "dev": "ts-node-dev --respawn --transpileOnly ./index.ts"
   },
@@ -24,6 +24,7 @@
     "@babel/preset-typescript": "^7.10.1",
     "@types/jest": "^25.2.3",
     "babel-jest": "^26.0.1",
+    "copyfiles": "^2.3.0",
     "jest": "^26.0.1",
     "ts-jest": "^26.0.0"
   }
