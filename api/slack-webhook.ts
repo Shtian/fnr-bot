@@ -43,7 +43,7 @@ export default (req: NowRequest, res: NowResponse): void => {
     type: "section",
     text: {
       type: "plain_text",
-      text: `Her har du ${count} fødselsnummere til personer i aldere ${minAge}-${maxAge}`,
+      text: `Her har du ${count} fødselsnummer(e) til personer i alderen ${minAge}-${maxAge}`,
     },
   };
   const blocks: SlackSectionBlock[] = [headerBlock].concat(
