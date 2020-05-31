@@ -1,4 +1,4 @@
-import { getRandomDateInRange } from "./date-generator";
+import { rnd, zeropad, getAgeFromFrn, getRandomDateInRange } from "./utils";
 
 export type BinaryGender = "male" | "female";
 
@@ -8,22 +8,11 @@ export interface FnrInfo {
   fnr: string;
 }
 
-const CONTROL_DIGIT_1 = [3, 7, 6, 1, 8, 9, 4, 5, 2, 1];
-const CONTROL_DIGIT_2 = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1];
-
-const zeropad = (i: number | string): string => {
-  return `${i}`.padStart(2, "0");
-};
-
-const rnd = (min = 0, max = 1): number => {
-  return Math.floor(Math.random() * max) + min;
-};
-
-const getAge = (birthDate: Date) =>
-  Math.floor((new Date().getTime() - birthDate.getTime()) / 3.15576e10);
+const CONTROL_SEQUENCE_1 = [3, 7, 6, 1, 8, 9, 4, 5, 2, 1];
+const CONTROL_SEQUENCE_2 = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1];
 
 /**
- * odd hundreds = is between 0 and 499, even are between 500 and 999
+ * Odd hundreds = is between 0 and 499, even are between 500 and 999
  * 1929 = 900 = odd -> 0,499
  * 2000 = 0 = even -> 500, 999
  */
@@ -32,6 +21,10 @@ export const generateINumber = (year: number | string): string => {
   return number.toString().padStart(3, "0");
 };
 
+/**
+ * Multiply digits with control sequence one, if the product is divisible by 11, the digit is valid
+ * @param dateAndINumber string
+ */
 export const createControlDigitOne = (
   dateAndINumber: string
 ): number | null => {
@@ -40,7 +33,7 @@ export const createControlDigitOne = (
     const numberWithPossibleDigit = `${dateAndINumber}${possibleDigit}`
       .split("")
       .map(Number);
-    const checksum = CONTROL_DIGIT_1.reduce(
+    const checksum = CONTROL_SEQUENCE_1.reduce(
       (a, b, i) => a + b * numberWithPossibleDigit[i],
       0
     );
@@ -48,24 +41,30 @@ export const createControlDigitOne = (
   }
 
   console.debug(
-    "could not generate control digit one for number:",
+    "Could not generate control digit one for number:",
     dateAndINumber
   );
 
   return null;
 };
 
+/**
+ * Multiply digits with control sequence two, if the product is divisible by 11, the digit is valid
+ * @param dateAndINumber
+ * @param controlDigitOne
+ */
 export const createControlDigitTwo = (
-  dateAndINumberAndControlDigitOne: string
+  dateAndINumber: string,
+  controlDigitOne: number | null
 ): number | null => {
-  if (dateAndINumberAndControlDigitOne.indexOf("null") !== -1) return null;
+  if (controlDigitOne === null) return null;
 
   for (let i = 0; i < 10; i++) {
     const possibleDigit = i;
-    const numberWithPossibleDigit = `${dateAndINumberAndControlDigitOne}${possibleDigit}`
+    const numberWithPossibleDigit = `${dateAndINumber}${possibleDigit}`
       .split("")
       .map(Number);
-    const checksum = CONTROL_DIGIT_2.reduce(
+    const checksum = CONTROL_SEQUENCE_2.reduce(
       (a, b, i) => a + b * numberWithPossibleDigit[i],
       0
     );
@@ -73,9 +72,10 @@ export const createControlDigitTwo = (
   }
 
   console.debug(
-    "could not generate control digit two for number:",
-    dateAndINumberAndControlDigitOne
+    "Could not generate control digit two for number:",
+    dateAndINumber
   );
+
   return null;
 };
 
@@ -85,17 +85,27 @@ const generate = (min: Date, max: Date) => {
   const datestring = `${zeropad(date.getDate())}${zeropad(
     date.getMonth()
   )}${zeropad(date.getFullYear().toString().substring(2, 4))}`;
+
   let iNumber = "";
   let controlDigitOne;
   let controlDigitTwo;
   let foundNumber = false;
-  while (!foundNumber) {
+  let retries = 0;
+
+  while (!foundNumber && retries < 20) {
+    retries++;
     iNumber = generateINumber(year);
-    controlDigitOne = createControlDigitOne(`${datestring}${iNumber}`);
-    controlDigitTwo = createControlDigitTwo(
-      `${datestring}${iNumber}${controlDigitOne}`
-    );
+    const dateAndINumber = `${datestring}${iNumber}`;
+    controlDigitOne = createControlDigitOne(dateAndINumber);
+    controlDigitTwo = createControlDigitTwo(dateAndINumber, controlDigitOne);
     foundNumber = controlDigitOne !== null && controlDigitTwo !== null;
+  }
+
+  if (!foundNumber) {
+    console.debug(
+      `Could not generate control digits for ${datestring} ${iNumber}`
+    );
+    return null;
   }
 
   return `${datestring}${iNumber}${controlDigitOne}${controlDigitTwo}`;
@@ -120,18 +130,10 @@ export const generator = (
 
   for (let i = 0; i < count; i++) {
     const fnr = generate(birthdateRangeStart, birthdateRangeEnd);
+    if (fnr === null) continue;
     const gender = Number(fnr.split("")[8]) % 2 ? "male" : "female";
-    const birthYear =
-      Number(fnr.split("")[6]) < 5
-        ? `19${fnr.substring(4, 6)}`
-        : `20${fnr.substring(4, 6)}`;
-    const age = getAge(
-      new Date(
-        Number(birthYear),
-        Number(fnr.substring(2, 4)),
-        Number(fnr.substring(0, 2))
-      )
-    );
+
+    const age = getAgeFromFrn(fnr);
     fnrs.push({ age, gender, fnr });
   }
 
