@@ -59,9 +59,11 @@ export const createControlDigitTwo = (
 ): number | null => {
   if (controlDigitOne === null) return null;
 
+  const dateWithControlDigitOne = `${dateAndINumber}${controlDigitOne}`;
+
   for (let i = 0; i < 10; i++) {
     const possibleDigit = i;
-    const numberWithPossibleDigit = `${dateAndINumber}${possibleDigit}`
+    const numberWithPossibleDigit = `${dateWithControlDigitOne}${possibleDigit}`
       .split("")
       .map(Number);
     const checksum = CONTROL_SEQUENCE_2.reduce(
@@ -73,7 +75,7 @@ export const createControlDigitTwo = (
 
   console.debug(
     "Could not generate control digit two for number:",
-    dateAndINumber
+    dateWithControlDigitOne
   );
 
   return null;
@@ -91,7 +93,6 @@ const generate = (min: Date, max: Date) => {
   let controlDigitTwo;
   let foundNumber = false;
   let retries = 0;
-
   while (!foundNumber && retries < 20) {
     retries++;
     iNumber = generateINumber(year);
@@ -132,7 +133,6 @@ export const generator = (
     const fnr = generate(birthdateRangeStart, birthdateRangeEnd);
     if (fnr === null) continue;
     const gender = Number(fnr.split("")[8]) % 2 ? "male" : "female";
-
     const age = getAgeFromFrn(fnr);
     fnrs.push({ age, gender, fnr });
   }

@@ -3,7 +3,7 @@ export const zeropad = (i: number | string): string => {
 };
 
 export const rnd = (min = 0, max = 1): number => {
-  return Math.floor(Math.random() * max) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 export const getAge = (birthDate: Date): number =>
