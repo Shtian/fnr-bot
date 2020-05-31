@@ -35,7 +35,7 @@ export default (req: NowRequest, res: NowResponse): void => {
   // eslint-disable-next-line prefer-const
   let [minAge = "0", maxAge = "120", count = "10"] = req.body.text.split(" ");
 
-  if (minAge > maxAge) {
+  if (Number(minAge) > Number(maxAge)) {
     res.json({
       response_type: "ephemeral",
       text: `Min age cannot be higher than max age`,
@@ -45,7 +45,7 @@ export default (req: NowRequest, res: NowResponse): void => {
 
   if (!count) {
     count = 1;
-  } else if (count > 50) {
+  } else if (Number(count) > 50) {
     count = 50;
   }
 

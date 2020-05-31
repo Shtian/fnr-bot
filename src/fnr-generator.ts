@@ -16,7 +16,7 @@ const CONTROL_SEQUENCE_2 = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1];
  * 1929 = 900 = odd -> 0,499
  * 2000 = 0 = even -> 500, 999
  */
-export const generateINumber = (year: number | string): string => {
+export const generateINumber = (year: number): string => {
   const number = year < 2000 ? rnd(0, 499) : rnd(500, 999);
   return number.toString().padStart(3, "0");
 };
