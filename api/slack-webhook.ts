@@ -1,6 +1,6 @@
 import { NowRequest, NowResponse } from "@now/node";
 import { generator, FnrInfo } from "../src/fnr-generator";
-import { formatMsg } from "../src/string-formatter";
+import { fnrInfoToEmojiString } from "../src/string-formatter";
 
 interface SlackText {
   type: "plain_text" | "mrkdwn";
@@ -15,7 +15,7 @@ interface SlackSectionBlock {
 const generateBlock = ({ age, gender, fnr }: FnrInfo): SlackSectionBlock => {
   return {
     type: "section",
-    text: { type: "plain_text", text: formatMsg(age, gender, fnr) },
+    text: { type: "plain_text", text: fnrInfoToEmojiString(age, gender, fnr) },
   };
 };
 

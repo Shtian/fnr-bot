@@ -47,7 +47,7 @@ const getMaleAgeEmoji = (age: number): string => {
   return "🦖";
 };
 
-export const formatMsg = (
+export const fnrInfoToEmojiString = (
   age: number,
   gender: BinaryGender,
   fnr: string

@@ -19,7 +19,7 @@ describe("fnr control digits", () => {
   });
 
   test("should create legal control digit 2", () => {
-    const res = createControlDigitTwo("3112995671");
+    const res = createControlDigitTwo("311299567", 1);
     expect(res).toBe(5);
   });
 });
