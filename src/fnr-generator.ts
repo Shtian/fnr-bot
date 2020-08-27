@@ -85,7 +85,7 @@ const generate = (min: Date, max: Date) => {
   const date = getRandomDateInRange(min, max);
   const year = date.getFullYear();
   const datestring = `${zeropad(date.getDate())}${zeropad(
-    date.getMonth()
+    date.getMonth()+1
   )}${zeropad(date.getFullYear().toString().substring(2, 4))}`;
 
   let iNumber = "";
