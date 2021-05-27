@@ -13,8 +13,8 @@
   "author": "Stian Haga",
   "license": "ISC",
   "dependencies": {
-    "@now/node": "^1.7.2",
-    "@types/express": "^4.17.7",
+    "@now/node": "^1.7.4",
+    "@types/express": "^4.17.8",
     "express": "^4.17.1",
     "ts-node-dev": "^1.0.0"
   },
