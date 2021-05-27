@@ -58,6 +58,7 @@ export default (req: NowRequest, res: NowResponse): void => {
       text: `Her har du ${count} fødselsnummer(e) til personer i alderen ${minAge}-${maxAge}`,
     },
   };
+
   const blocks: SlackSectionBlock[] = [headerBlock].concat(
     fnrs.map(generateBlock)
   );
