@@ -20,7 +20,6 @@ const generateBlock = ({ age, gender, fnr }: FnrInfo): SlackSectionBlock => {
 };
 
 export default (req: NowRequest, res: NowResponse): void => {
-  console.log(req.body.token, process.env);
   if (
     !process.env.FNR_SLACK_TOKENS ||
     !process.env.FNR_SLACK_TOKENS.split(";").includes(req.body.token)

@@ -8,7 +8,6 @@ describe("fnr generate", () => {
   test("should return a number with 11 digits", () => {
     const res = generator(0, 120, 1);
     expect(res[0].fnr.length).toBe(11);
-    console.log(res);
   });
 });
 
