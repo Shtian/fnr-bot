@@ -49,7 +49,13 @@ export default (req: NowRequest, res: NowResponse): void => {
   }
 
   const fnrs = generator(Number(minAge), Number(maxAge), Number(count));
-
+  console.debug(
+    "minAge: ",
+    minAge,
+    minAge === "0",
+    typeof minAge,
+    req.body.text
+  );
   const headerBlock: SlackSectionBlock = {
     type: "section",
     text: {
@@ -58,12 +64,8 @@ export default (req: NowRequest, res: NowResponse): void => {
     },
   };
 
-  const blocks: SlackSectionBlock[] = [headerBlock].concat(
-    fnrs.map(generateBlock)
-  );
-
   res.json({
     response_type: "ephemeral",
-    blocks: blocks,
+    blocks: [headerBlock, ...fnrs.map(generateBlock)],
   });
 };
