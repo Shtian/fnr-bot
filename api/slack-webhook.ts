@@ -32,7 +32,7 @@ export default (req: NowRequest, res: NowResponse): void => {
   }
 
   // eslint-disable-next-line prefer-const
-  let [minAge = "0", maxAge = "120", count = "10"] = req.body.text.split(" ");
+  let [minAge, maxAge = "120", count = "10"] = req.body.text.split(" ");
 
   if (Number(minAge) > Number(maxAge)) {
     res.json({
@@ -48,14 +48,10 @@ export default (req: NowRequest, res: NowResponse): void => {
     count = 50;
   }
 
+  if (minAge === "") minAge = "0";
+
   const fnrs = generator(Number(minAge), Number(maxAge), Number(count));
-  console.debug(
-    "minAge: ",
-    minAge,
-    minAge === "0",
-    typeof minAge,
-    req.body.text
-  );
+
   const headerBlock: SlackSectionBlock = {
     type: "section",
     text: {
