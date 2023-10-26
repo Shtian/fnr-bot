@@ -18,8 +18,8 @@ export const getAgeFromFrn = (fnr: string): number => {
     new Date(
       Number(birthYear),
       Number(fnr.substring(2, 4)),
-      Number(fnr.substring(0, 2))
-    )
+      Number(fnr.substring(0, 2)),
+    ),
   );
 };
 

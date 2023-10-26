@@ -50,7 +50,7 @@ const getMaleAgeEmoji = (age: number): string => {
 export const fnrInfoToEmojiString = (
   age: number,
   gender: BinaryGender,
-  fnr: string
+  fnr: string,
 ): string => {
   switch (gender) {
     case "female":

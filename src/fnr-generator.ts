@@ -26,7 +26,7 @@ export const generateINumber = (year: number): string => {
  * @param dateAndINumber string
  */
 export const createControlDigitOne = (
-  dateAndINumber: string
+  dateAndINumber: string,
 ): number | null => {
   for (let i = 0; i < 10; i++) {
     const possibleDigit = i;
@@ -35,14 +35,14 @@ export const createControlDigitOne = (
       .map(Number);
     const checksum = CONTROL_SEQUENCE_1.reduce(
       (a, b, i) => a + b * numberWithPossibleDigit[i],
-      0
+      0,
     );
     if (checksum % 11 === 0) return possibleDigit;
   }
 
   console.debug(
     "Could not generate control digit one for number:",
-    dateAndINumber
+    dateAndINumber,
   );
 
   return null;
@@ -55,7 +55,7 @@ export const createControlDigitOne = (
  */
 export const createControlDigitTwo = (
   dateAndINumber: string,
-  controlDigitOne: number | null
+  controlDigitOne: number | null,
 ): number | null => {
   if (controlDigitOne === null) return null;
 
@@ -68,14 +68,14 @@ export const createControlDigitTwo = (
       .map(Number);
     const checksum = CONTROL_SEQUENCE_2.reduce(
       (a, b, i) => a + b * numberWithPossibleDigit[i],
-      0
+      0,
     );
     if (checksum % 11 === 0) return possibleDigit;
   }
 
   console.debug(
     "Could not generate control digit two for number:",
-    dateWithControlDigitOne
+    dateWithControlDigitOne,
   );
 
   return null;
@@ -85,7 +85,7 @@ const generate = (min: Date, max: Date) => {
   const date = getRandomDateInRange(min, max);
   const year = date.getFullYear();
   const datestring = `${zeropad(date.getDate())}${zeropad(
-    date.getMonth() + 1
+    date.getMonth() + 1,
   )}${zeropad(date.getFullYear().toString().substring(2, 4))}`;
 
   let iNumber = "";
@@ -104,7 +104,7 @@ const generate = (min: Date, max: Date) => {
 
   if (!foundNumber) {
     console.debug(
-      `Could not generate control digits for ${datestring} ${iNumber}`
+      `Could not generate control digits for ${datestring} ${iNumber}`,
     );
     return null;
   }
@@ -115,7 +115,7 @@ const generate = (min: Date, max: Date) => {
 export const generator = (
   minAge: number,
   maxAge: number,
-  count: number
+  count: number,
 ): FnrInfo[] => {
   const fnrs: FnrInfo[] = [];
   const now = new Date();
@@ -126,7 +126,7 @@ export const generator = (
   const birthdateRangeEnd = new Date(
     now.getFullYear() - maxAge,
     now.getMonth(),
-    now.getDate()
+    now.getDate(),
   );
 
   for (let i = 0; i < count; i++) {
