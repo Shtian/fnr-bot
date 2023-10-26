@@ -1,18 +1,14 @@
 {
-    "routes": [
-        {
-            "src": "/fnr",
-            "methods": [
-                "GET"
-            ],
-            "dest": "/api/fnr.ts"
-        },
-        {
-            "src": "/slack-webhook",
-            "methods": [
-                "POST"
-            ],
-            "dest": "/api/slack-webhook.ts"
-        }
-    ]
+  "routes": [
+    {
+      "src": "/fnr",
+      "methods": ["GET"],
+      "dest": "/api/fnr.ts"
+    },
+    {
+      "src": "/slack-webhook",
+      "methods": ["POST"],
+      "dest": "/api/slack-webhook.ts"
+    }
+  ]
 }
