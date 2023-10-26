@@ -2,3 +2,4 @@
 /node_modules
 .eslintcache
 .vercel
+.DS_Store
