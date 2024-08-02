@@ -6,8 +6,10 @@ export function verifySignature(
   req: NowRequest,
   slackSigningSecret: string | undefined,
 ): boolean {
-  const slackSignature = req.headers["x-slack-signature"] as string;
+  // using qs and RFC1738 to ensure that the request body whitespace
+  // is preserved in line with how slack calculates the signature
   const requestBody = qs.stringify(req.body, { format: "RFC1738" });
+  const slackSignature = req.headers["x-slack-signature"] as string;
   const timestamp = req.headers["x-slack-request-timestamp"];
   const time = Math.floor(new Date().getTime() / 1000);
 
