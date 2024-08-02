@@ -1,6 +1,7 @@
 import { NowRequest, NowResponse } from "@now/node";
 import { generator, FnrInfo } from "../src/fnr-generator";
 import { fnrInfoToEmojiString } from "../src/string-formatter";
+import { verifySignature } from "../src/verify-signature";
 
 interface SlackText {
   type: "plain_text" | "mrkdwn";
@@ -20,10 +21,7 @@ const generateBlock = ({ age, gender, fnr }: FnrInfo): SlackSectionBlock => {
 };
 
 export default (req: NowRequest, res: NowResponse): void => {
-  if (
-    !process.env.FNR_SLACK_TOKENS ||
-    !process.env.FNR_SLACK_TOKENS.split(";").includes(req.body.token)
-  ) {
+  if (!verifySignature(req, process.env.FNR_SLACK_SIGNING_SECRET)) {
     res.json({
       response_type: "ephemeral",
       text: `Slack token incorrect`,
