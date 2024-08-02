@@ -54,7 +54,7 @@ export default (req: NowRequest, res: NowResponse): void => {
     type: "section",
     text: {
       type: "plain_text",
-      text: `Her har du ${count} fødselsnummer(e) til personer i alderen ${minAge}-${maxAge}`,
+      text: `Absolutely! 🫡 ${count} fødselsnummer(e) med alderen ${minAge}-${maxAge} år:`,
     },
   };
 
